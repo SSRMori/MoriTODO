@@ -19,9 +19,10 @@ function createWindow () {
    */
   Menu.setApplicationMenu(null)
   mainWindow = new BrowserWindow({
-    height: 563,
-    useContentSize: true,
-    width: 1000
+    height: 500,
+    useContentSize: false,
+    width: 800,
+    resizable: false
   })
 
   mainWindow.loadURL(winURL)
