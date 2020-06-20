@@ -16,8 +16,9 @@ export default new Router({
       component: require('@/components/index').default
     },
     {
-      path: '*',
-      redirect: '/'
+      path: '/login',
+      name: 'login',
+      component: require('@/components/login').default
     }
   ]
 })
