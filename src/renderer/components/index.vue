@@ -12,13 +12,7 @@
       >
         <Card style="width:60%; margin: 20% auto;" v-on:load="showCard()">
           <div id="cardContent">
-            <!-- <Carousel v-model="cardVal" autoplay loop>
-              <CarouselItem>
-                <div> -->
-                  <img src="@/assets/1.jpg" />
-                <!-- </div>
-              </CarouselItem>
-            </Carousel> -->
+            <img src="@/assets/1.jpg" />
           </div>
         </Card>
       </Sider>
@@ -37,7 +31,7 @@ export default {
         }
       },
       cardVal: 0
-    }
+    };
   }
 };
 </script>
