@@ -8,7 +8,7 @@
         <a-layout-content>
           <a-card id="login-card" :bordered="false">
             <a-avatar :size="64" icon="user" />
-            <a-input v-model="userName" placeholder="username">
+            <a-input v-model="username" placeholder="username">
               <a-icon slot="prefix" type="user" />
             </a-input>
             <a-input-password placeholder="password">
@@ -30,10 +30,10 @@
         <a-card hoverable>
           <div slot="cover">
             <a-carousel autoplay>
-              <img src="https://picsum.photos/400/300"/>
-              <img src="https://picsum.photos/400/300" />
-              <img src="https://picsum.photos/400/300" />
-              <img src="https://picsum.photos/400/300" />
+              <img src="https://picsum.photos/400/300?random=1"/>
+              <img src="https://picsum.photos/400/300?random=2" />
+              <img src="https://picsum.photos/400/300?random=3" />
+              <img src="https://picsum.photos/400/300?random=4" />
             </a-carousel>
           </div>
           <p>MoriTODO</p>
@@ -51,8 +51,7 @@ export default {
       username: "",
       password: "",
       buttonLoading: false,
-      loginText: "登陆",
-      cardLoading: true
+      loginText: "登陆"
     };
   },
   methods: {
@@ -62,10 +61,6 @@ export default {
     }
   }
 };
-
-setTimeout(()=> {
-  app.data.cardLoading = false
-}, 3000)
 </script>
 
 <style>
@@ -91,11 +86,6 @@ div#loginWrapper {
 #loginWrapper .ant-layout-content #login-card {
   background: #f1f2f6;
   text-align: center;
-}
-
-#loginWrapper .ant-layout-header {
-  padding-left: 0 !important;
-  padding-right: auto !important;
 }
 
 #loginWrapper .ant-layout-footer {

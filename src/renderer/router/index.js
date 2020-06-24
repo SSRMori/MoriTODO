@@ -12,8 +12,18 @@ export default new Router({
     },
     {
       path: '/',
+      name: 'cover',
+      component: require('@/components/cover').default
+    },
+    {
+      path: '/index',
       name: 'index',
       component: require('@/components/index').default
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: require('@/components/register').default
     },
     {
       path: '/login',
