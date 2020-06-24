@@ -21,6 +21,8 @@
     "postinstall": ""
   },
   "dependencies": {
+    "animate.css": "^4.1.0",
+    "ant-design-vue": "^1.6.2",
     "axios": "^0.18.0",
     "view-design": "^4.2.0",
     "vue": "^2.5.16",

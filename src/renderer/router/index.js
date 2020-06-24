@@ -12,12 +12,23 @@ export default new Router({
     },
     {
       path: '/',
+      name: 'cover',
+      component: require('@/components/cover').default
+    },
+    {
+      path: '/index',
       name: 'index',
       component: require('@/components/index').default
     },
     {
-      path: '*',
-      redirect: '/'
+      path: '/register',
+      name: 'register',
+      component: require('@/components/register').default
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: require('@/components/login').default
     }
   ]
 })
