@@ -1,6 +1,6 @@
 <template>
   <div id="cover">
-    <div>
+    <div id="logoWrapper">
       <a-icon id="logo" type="check-square" theme="twoTone" two-tone-color="#7bed9f" />
       <p>Mori TODO</p>
     </div>
@@ -8,13 +8,13 @@
 </template>
 <script>
 export default {
-    name: "cover",
-    created(){
-        setTimeout(()=>{
-            this.$router.push({path: "/index"})
-        }, 7000)
-    }
-}
+  name: "cover",
+  created() {
+    setTimeout(()=>{
+        this.$router.push({path: "/index"})
+    }, 7000)
+  }
+};
 </script>
 
 <style>
@@ -49,6 +49,11 @@ export default {
   }
 }
 
+#logoWrapper {
+  text-align: center;
+  display: inline-block;
+}
+
 #cover p {
   font-size: 40px;
   text-align: center;
@@ -70,10 +75,10 @@ export default {
   }
 }
 #logo {
-    animation-name: bounceInDown;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
-
+  animation-name: bounceInDown;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  display: inline-block;
 }
 
 @keyframes bounceInDown {
@@ -107,5 +112,4 @@ export default {
     transform: translate3d(0, 0, 0);
   }
 }
-
 </style>
