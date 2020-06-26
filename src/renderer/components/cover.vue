@@ -74,7 +74,7 @@ export default {
     opacity: 1;
   }
 }
-#logo {
+#cover #logo {
   animation-name: bounceInDown;
   animation-duration: 1s;
   animation-fill-mode: forwards;

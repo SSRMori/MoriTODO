@@ -1,0 +1,24 @@
+{
+  "todos": [
+    {
+      "name": "Study",
+      "done": false
+    },
+    {
+      "name": "Eat",
+      "done": false
+    },
+    {
+      "name": "Sleep",
+      "done": false
+    },
+    {
+      "name": "Homework",
+      "done": false
+    },
+    {
+      "name": "Exam",
+      "done": false
+    }
+  ]
+}
