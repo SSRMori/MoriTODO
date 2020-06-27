@@ -7,15 +7,39 @@
             <a-icon id="indexLogo" type="check-square" theme="twoTone" two-tone-color="#7bed9f" />
             <span>Mori TODO</span>
           </p>
+          <a-dropdown>
+            <a id="moreOption">
+              <a-icon type="plus" />
+            </a>
+            <a-menu slot="overlay">
+              <a-menu-item>
+                <a>Add item</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a v-on:click="()=>{this.$router.push({path: '/timeline'})}">Timeline</a>
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
         </a-layout-header>
         <a-layout-content>
           <div id="todoList">
-            <todoItem v-for="item in todoItems" v-bind:name="item.name"></todoItem>
+            <a-empty v-show="empty">
+              <span slot="description">Nothing to do</span>
+              <a-button id="emptyAddItem" type="primary">Add one now</a-button>
+            </a-empty>
+            <todoItem
+              v-for="item in todoItems"
+              v-bind:name="item.name"
+              v-on:done="itemDone(item.name)"
+              v-on:delete="itemDelete(item.name)"
+              v-bind:description="item.description"
+              v-bind:checked="item.finished"
+            ></todoItem>
           </div>
           <a-button id="moreTodo" icon="down" block dashed v-on:click="scrollDown" />
         </a-layout-content>
         <a-layout-footer>
-          <a-icon type="copyright" />Mori Jan. 2020
+          <a-icon type="copyright" />Mori June 2020
         </a-layout-footer>
       </a-layout>
     </a-layout>
@@ -31,15 +55,27 @@ export default {
   data: function() {
     return {
       more: true,
-      todoItems: []
+      todoItems: [],
+      empty: false
     };
   },
   created() {
     database.createDB();
+    database.addItem("Study", "");
+    database.addItem("Eat", "");
+    database.addItem("Sleep", "");
+    database.addItem("Homework1", "");
+    database.addItem("Homework2", "");
+    database.addItem("Exam", "");
     var items = database.readUnfinishedItems();
-    var i;
-    for (i = 0; i < items.length; i++) {
-      this.todoItems.push(items[i]);
+    if (items.length == 0) {
+      this.empty = true;
+    } else {
+      var i;
+      for (i = 0; i < items.length; i++) {
+        this.todoItems.push(items[i]);
+        console.log(items[i]);
+      }
     }
   },
   methods: {
@@ -47,6 +83,45 @@ export default {
       var height = Number(document.getElementById("todoList").scrollTop);
       height += 100;
       document.getElementById("todoList").scrollTop = height.toString();
+    },
+    itemDone: function(name) {
+      console.log(name + " item update");
+      var index = -1;
+      var i;
+      for (i = 0; i < this.todoItems.length; i++) {
+        if (this.todoItems[i].name == name) {
+          index = i;
+          break;
+        }
+      }
+      if (index != -1) {
+        setTimeout(() => {
+          this.todoItems.splice(index, 1);
+        }, 1000);
+        database.itemFinish(name);
+        if (this.todoItems.length == 0) {
+          this.empty = true;
+        }
+      }
+    },
+    itemDelete: function(name) {
+      console.log(name + " item delete");
+      var index = -1;
+      var i;
+      for (i = 0; i < this.todoItems.length; i++) {
+        if (this.todoItems[i].name == name) {
+          index = i;
+          break;
+        }
+      }
+      console.log(index);
+      if (index != -1) {
+        this.todoItems.splice(index, 1);
+        database.itemDelete(name);
+        if (this.todoItems.length == 0) {
+          this.empty = true;
+        }
+      }
     }
   }
 };
@@ -173,5 +248,10 @@ export default {
   to {
     transform: scale3d(1, 1, 1);
   }
+}
+
+#indexWrapper #moreOption {
+  /* margin: 20px 0 auto auto; */
+  float: right;
 }
 </style>

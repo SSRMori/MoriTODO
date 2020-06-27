@@ -12,7 +12,7 @@ export default {
   created() {
     setTimeout(()=>{
         this.$router.push({path: "/index"})
-    }, 7000)
+    }, 5000)
   }
 };
 </script>
@@ -23,7 +23,7 @@ export default {
   height: 100vh;
   background-color: #70a1ff;
   animation-name: coverDisappear;
-  animation-delay: 5s;
+  animation-delay: 3s;
   animation-duration: 2s;
   animation-fill-mode: forwards;
   opacity: 1;

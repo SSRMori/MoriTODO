@@ -1,15 +1,13 @@
 <template>
-  <div v-show="show" id="todoItemWrapper">
+  <div id="todoItemWrapper">
     <div id="todoItem">
-      <a-checkbox v-on:change="Checked">{{ name }}</a-checkbox>
+      <a-popover v-bind:title="name">
+        <a-checkbox v-on:change="Checked" v-bind:checked="check">{{ name }}</a-checkbox>
+        <span slot="content">{{description}}</span>
+      </a-popover>
       <a-button id="todoDelete" type="danger" shape="circle" size="small" v-on:click="deleteItem" />
-      <a-modal
-        :visible="modalVisible"
-        @ok="modalOk"
-        @cancel="modalCancel"
-        width="250px"
-      >
-        <a-icon type="question-circle" style="font-size: larger;"/>
+      <a-modal :visible="modalVisible" @ok="modalOk" @cancel="modalCancel" width="250px">
+        <a-icon type="question-circle" style="font-size: larger;" />
         Are you sure you want to delete {{name}}?
       </a-modal>
     </div>
@@ -17,24 +15,29 @@
   </div>
 </template>
 <script>
+import database from "./script/file";
 export default {
   name: "todoItem",
-  props: ["name"],
+  props: ["name", 'description'],
   data: function() {
     return {
-      show: true,
-      modalVisible: false
+      modalVisible: false,
+      check: false
     };
+  },
+  created(){
   },
   methods: {
     Checked: function() {
-      this.show = false;
+      this.check = true
+      database.itemFinish(this.name);
+      this.$emit('done')
+      setTimeout(()=>{this.check = false}, 1000)
     },
     deleteItem: function() {
       this.modalVisible = true;
     },
     modalOk: function(e) {
-      this.show = false;
       this.modalVisible = false;
       this.$notification.open({
         message: this.name + " deleted.",
@@ -43,6 +46,7 @@ export default {
           float: "right"
         }
       });
+      this.$emit('delete')
     },
     modalCancel: function(e) {
       this.modalVisible = false;
