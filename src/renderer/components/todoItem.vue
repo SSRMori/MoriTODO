@@ -18,7 +18,7 @@
 import database from "./script/file";
 export default {
   name: "todoItem",
-  props: ["name", 'description'],
+  props: ['id', "name", 'description'],
   data: function() {
     return {
       modalVisible: false,
@@ -30,22 +30,17 @@ export default {
   methods: {
     Checked: function() {
       this.check = true
-      database.itemFinish(this.name);
+      database.itemFinish(this.id);
+      this.$message.info(this.name + " finished.")
       this.$emit('done')
-      setTimeout(()=>{this.check = false}, 1000)
+      setTimeout(()=>{this.check = false}, 500)
     },
     deleteItem: function() {
       this.modalVisible = true;
     },
     modalOk: function(e) {
       this.modalVisible = false;
-      this.$notification.open({
-        message: this.name + " deleted.",
-        style: {
-          width: "200px",
-          float: "right"
-        }
-      });
+      this.$message.warning(this.name + " deleted.")
       this.$emit('delete')
     },
     modalCancel: function(e) {

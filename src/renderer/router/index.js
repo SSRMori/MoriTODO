@@ -24,6 +24,11 @@ export default new Router({
       path: '/timeline',
       name: 'timeline',
       component: require('@/components/timeline').default
+    },
+    {
+      path: '/add',
+      name: 'add',
+      component: require('@/components/add').default
     }
   ]
 })

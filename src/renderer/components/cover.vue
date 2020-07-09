@@ -7,9 +7,11 @@
   </div>
 </template>
 <script>
+import database from "./script/file";
 export default {
   name: "cover",
   created() {
+    database.createDB();
     setTimeout(()=>{
         this.$router.push({path: "/index"})
     }, 5000)

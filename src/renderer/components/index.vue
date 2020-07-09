@@ -13,7 +13,7 @@
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a>Add item</a>
+                <a v-on:click="()=>{this.$router.push({path: '/add'})}">Add item</a>
               </a-menu-item>
               <a-menu-item>
                 <a v-on:click="()=>{this.$router.push({path: '/timeline'})}">Timeline</a>
@@ -25,18 +25,23 @@
           <div id="todoList">
             <a-empty v-show="empty">
               <span slot="description">Nothing to do</span>
-              <a-button id="emptyAddItem" type="primary">Add one now</a-button>
+              <a-button
+                id="emptyAddItem"
+                type="primary"
+                v-on:click="()=>{this.$router.push({path: '/add'})}"
+              >Add one now</a-button>
             </a-empty>
             <todoItem
               v-for="item in todoItems"
               v-bind:name="item.name"
-              v-on:done="itemDone(item.name)"
-              v-on:delete="itemDelete(item.name)"
+              v-on:done="itemDone(item.id, item.name)"
+              v-on:delete="itemDelete(item.id, item.name)"
               v-bind:description="item.description"
               v-bind:checked="item.finished"
+              v-bind:id="item.id"
             ></todoItem>
           </div>
-          <a-button id="moreTodo" icon="down" block dashed v-on:click="scrollDown" />
+          <a-button id="moreTodo" icon="down" block dashed v-on:click="scrollDown" disabled />
         </a-layout-content>
         <a-layout-footer>
           <a-icon type="copyright" />Mori June 2020
@@ -60,13 +65,13 @@ export default {
     };
   },
   created() {
-    database.createDB();
-    database.addItem("Study", "");
-    database.addItem("Eat", "");
-    database.addItem("Sleep", "");
-    database.addItem("Homework1", "");
-    database.addItem("Homework2", "");
-    database.addItem("Exam", "");
+    // database.createDB();
+    // database.addItem("Study", "");
+    // database.addItem("Eat", "");
+    // database.addItem("Sleep", "");
+    // database.addItem("Homework1", "");
+    // database.addItem("Homework2", "");
+    // database.addItem("Exam", "");
     var items = database.readUnfinishedItems();
     if (items.length == 0) {
       this.empty = true;
@@ -78,14 +83,21 @@ export default {
       }
     }
   },
+  mounted() {
+    if (this.todoItems.length > 8) {
+      console.log("setPulse");
+      document.getElementById("moreTodo").style.animationName = "pulse";
+      document.getElementById("moreTodo").disabled = false;
+    }
+  },
   methods: {
     scrollDown: function() {
       var height = Number(document.getElementById("todoList").scrollTop);
       height += 100;
       document.getElementById("todoList").scrollTop = height.toString();
     },
-    itemDone: function(name) {
-      console.log(name + " item update");
+    itemDone: function(id, name) {
+      console.log(name + " item done");
       var index = -1;
       var i;
       for (i = 0; i < this.todoItems.length; i++) {
@@ -97,14 +109,20 @@ export default {
       if (index != -1) {
         setTimeout(() => {
           this.todoItems.splice(index, 1);
-        }, 1000);
-        database.itemFinish(name);
-        if (this.todoItems.length == 0) {
-          this.empty = true;
-        }
+        }, 500);
+        database.itemFinish(id);
+        setTimeout(() => {
+          if (this.todoItems.length == 0) {
+            this.empty = true;
+          }
+          if (this.todoItems.length <= 8) {
+            document.getElementById("moreTodo").style.animationName = "";
+            document.getElementById("moreTodo").disabled = true;
+          }
+        }, 500);
       }
     },
-    itemDelete: function(name) {
+    itemDelete: function(id, name) {
       console.log(name + " item delete");
       var index = -1;
       var i;
@@ -117,10 +135,16 @@ export default {
       console.log(index);
       if (index != -1) {
         this.todoItems.splice(index, 1);
-        database.itemDelete(name);
-        if (this.todoItems.length == 0) {
-          this.empty = true;
-        }
+        database.itemDelete(id);
+        setTimeout(() => {
+          if (this.todoItems.length == 0) {
+            this.empty = true;
+          }
+          if (this.todoItems.length <= 8) {
+            document.getElementById("moreTodo").style.animationName = "";
+            document.getElementById("moreTodo").disabled = true;
+          }
+        }, 500);
       }
     }
   }
@@ -135,10 +159,6 @@ export default {
   padding: 0;
   display: flex;
 }
-
-/* #indexWrapper * {
-  border: solid 2px red;
-} */
 
 #indexWrapper .ant-layout {
   width: 100vw;
@@ -231,7 +251,7 @@ export default {
   margin: 0 20%;
   width: 60%;
   background-color: #f1f2f6;
-  animation-name: pulse;
+  /* animation-name: pulse; */
   animation-duration: 1s;
   animation-iteration-count: infinite;
 }
@@ -242,7 +262,7 @@ export default {
   }
 
   50% {
-    transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.01, 1.01, 1.01);
   }
 
   to {

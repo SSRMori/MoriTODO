@@ -16,15 +16,39 @@ const db = low(adapter)
 
 const database = {
     createDB: () => {
-        db.get('todos').remove().write()
-        db.defaults({
-            todos: []
-        }).write()
-        console.log("Database created")
+        // var fs = require('fs')
+        var exists = false;
+        // fs.readdir("./", function (err, files) {
+        //     files.forEach(function (file) {
+        //         if (file == 'db.json') {
+        //             exists = true;
+        //         }
+        //     })
+        // })
+        if (!db.has('todos').value()) {
+            db.defaults({
+                todos: []
+            }).write()
+            console.log("Database created")
+        } 
+        else {
+            console.log("Database exists.")
+        }
+        // setTimeout(() => {
+        //     if (exists) {
+        //         console.log("Database exists.")
+        //     } else {
+        //         // db.get('todos').remove().write()
+        //         db.defaults({
+        //             todos: []
+        //         }).write()
+        //         console.log("Database created")
+        //     }
+        // }, 1000)
     },
     addItem: (name, description) => {
         var id = db.get('todos').size().value()
-        if (description == ""){
+        if (description == "") {
             description = "No descriptions."
         }
         db.get('todos').push({
@@ -50,9 +74,9 @@ const database = {
             status: 'created'
         }).value()
     },
-    itemFinish: (name) => {
+    itemFinish: (id) => {
         db.get('todos').find({
-            name: name
+            id:id
         }).assign({
             status: 'done',
             Time: {
@@ -61,9 +85,9 @@ const database = {
             }
         }).write()
     },
-    itemDelete: (name) => {
+    itemDelete: (id) => {
         db.get('todos').find({
-            name: name
+            id:id
         }).assign({
             status: "deleted",
             Time: {

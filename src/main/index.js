@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu } from 'electron'
+import { app, BrowserWindow, Menu, Tray } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -17,12 +17,30 @@ function createWindow () {
   /**
    * Initial window options
    */
+  const appIcon = new Tray(__static + "\\logo.png")
   Menu.setApplicationMenu(null)
+
+  const toolTipMenu = Menu.buildFromTemplate( [{
+    label: 'Exit',
+    click: function() {
+      app.quit()
+    }
+  }] )
+
+
   mainWindow = new BrowserWindow({
     height: 500,
     useContentSize: false,
-    width: 400
-    // resizable: false
+    width: 400,
+    resizable: false,
+    icon: __static + "\\logo.png",
+    skipTaskbar: true
+  })
+
+  appIcon.setToolTip('Mori TODO')
+  appIcon.setContextMenu(toolTipMenu)
+  appIcon.on('click', ()=> {
+    mainWindow.show()
   })
 
   mainWindow.loadURL(winURL)
